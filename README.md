@@ -1,2 +1,2 @@
-# Hepatozoon_Phylogeography
+# Hepatozoon Phylogeography
 Scripts for sequences selection 

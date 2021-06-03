@@ -12,7 +12,7 @@ library("taxonomizr")
 ##Database downloaded from ENA search
 ##https://www.ebi.ac.uk/ena/data/search?query=Hepatozoon+canis ##Accession date 05.06.2020
 
-db <- read_xml("~/Phylo_Hepatozoon/data/ena.xml") ##Read metadata extracted from ENA
+db <- read_xml("data/ena.xml") ##Read metadata extracted from ENA
 
 # get all the entries
 entries <- xml_children(db)
@@ -28,13 +28,13 @@ db.raw<- bind_rows(lapply(xml_attrs(entries), function(x) data.frame(as.list(x),
 ##This method is not working... Let's do it in bash
 ##First save the accessions as a data frame
 acces<- as.data.frame(db.raw$accession)
-write.table(acces, file = "~/Phylo_Hepatozoon/data/accession.txt", sep = "\t",
+write.table(acces, file = "data/accession.txt", sep = "\t",
             row.names = F, col.names = F, quote = F)
 
 ###!/bin/bash
 ## cat ~/Phylo_Hepatozoon/data/accession.txt | epost -db nuccore | esummary -db nuccore | xtract -pattern DocumentSummary -element Caption,TaxId
 
-tax.Id<- read.delim("~/Phylo_Hepatozoon/data/taxID.txt", header = F, sep = "\t")
+tax.Id<- read.delim("data/taxID.txt", header = F, sep = "\t")
 colnames(tax.Id)<- c("accession", "taxID") ### After taxID search just 1134 left... find out where are the 36 missing.
 
 ##get taxonomy using taxonomic IDs 
@@ -53,7 +53,7 @@ rm(acces, db.raw, taxmy, tax.Id)
 ##Eliminate all the entries without complete information
 db.compl<- db.all[complete.cases(db.all), ]
 
-write.csv(db.compl, "~/Phylo_Hepatozoon/output/database/Database_not_cleaned.csv", row.names = F)
+write.csv(db.compl, "output/database/Database_not_cleaned.csv", row.names = F)
 
 ##Summary of sequences
 require(htmlTable)
@@ -62,7 +62,7 @@ seq.summary<- htmlTable(seq.summary,
                           header =  "Number of sequences",
                           caption="Summary of sequences by species in non-cleaned database")
 
-write.table(seq.summary, "~/Phylo_Hepatozoon/output/database/Summary_not_cleaned.html")
+write.table(seq.summary, "output/database/Summary_not_cleaned.html")
 
 ##Ok out of the total amount of sequences just 970 are assigned as H. canis
 ##Let's eliminate sequences that are not true H. canis and repeated 
